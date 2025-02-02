@@ -1,0 +1,60 @@
+# Classroom management
+
+Quand un utilisateur rejoint la plateforme, il doit s'inscrire/ se connecter en inscrivant son email,noms, prenoms et un mot de passe
+
+Dans la page d'acceuil d'un utilisateur, on retrouve la liste des cours auquels il est inscrit. ainsi que deux bouttons pour creer ou rejoindre un cour.
+
+## creation de cour
+	Pour la creation d'un cour, l'utilisateur doit mettre un nom, ...
+	Il peux egalement definir son cour comme public(accessible via la barre de recherches) ou privés(accessible uniquement via le lien)
+	un code de cour copiable sera alors generé(le code sera a nouveau retrouvable dans l'espace d'administration du cour)
+
+
+## inscription a cour
+	Lorsqu'un utilisateur veux rejoindre un cour, il a deux sections (s'inspirer de Discord):
+		- Pour rejoindre un cour privé, il doit entre le code du cour
+		- Pour rejoindre un cour public, il doit faire une recherche
+	puis en cliquant sur le cour, il est automatiquement ajouté
+
+	Quand un utilisateur est supprimé d'un cour (possible uniquement par l'enseignant), il ne peux plus rejoindre, excepté s'il est ajouté manuellement par lenseignant
+
+
+## Administration d'un cour
+	L'enseignant(utilisateur ayant crée le cour) peut:
+		Ajouter un utilisateur
+		Supprimer un utilisateur
+		Regenerer le code du cour
+		Designer les delegués (qui auront les permisions dans les differentes sections du cour)
+
+## Specifications d'un cour
+On retrouve pour un 5 sections:
+	Discussions:
+		General: Groupe d'annonces du cours restreint aux enseignant et delegués
+		Discussions: Un groupe pour les discussions entre les adherants
+		etc: Des utilisateurs avec certaines permissions peuvent ajouter d'autre groupes au cour
+	
+	Devoir(a faire, non obligatoire):
+		Liste (datée) contenant les fiches d'exercices du cour(PDF). un devoir peux etre obligatoire ou pas. pour repondre a un devoir, un etudiant doit cliquer dessus et completer le formulaire, dans ce cas, le formulaire aura une seule question(de type fichier). l'enseignant doit avoir sepecifé le type de fichier valide comme reponse au devoir
+	
+	Supports: Ensembles des supports/livres du cours
+	
+	Evaluation: Liste des evaluations marquées(passé, remis, remis en retard, non fait, etc) sous forme de formulaire. Pour etre evalué, un 	utilisateur doit remplir le formulaire et le valider. les soumissions jusqu'a 30 min apres la date limite sont marqués en retard. 		apres 30 minutes, la soumission du formulaire est refusée
+	Adherants: Liste des etudiants inscrit au cour
+
+
+Introduction
+Objectifs du projet
+Description fonctionnelle
+Cas d'utilisation
+Flux utilisateur
+Architecture technique
+Choix technologiques
+Diagramme de cas d'utilisations
+Modelisation des données
+Étapes de réalisation
+Implementation de la base de données
+Developpement de l'API REST backend
+Design UI et UX du front end
+Developpement front end
+Tests unitaires
+Conclusion et perspectives
