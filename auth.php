@@ -1,6 +1,6 @@
 <?php
 
-$secret_key = "U5U5LHnsaDcErfguBOBTlGjR107i5hku";
+require 'config.php';
 
 
 function base64_url_encode($data) {
@@ -8,11 +8,12 @@ function base64_url_encode($data) {
 }
 
 function base64_url_decode($data) {
-    return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT));
+    return base64_decode(strtr($data, '-_', '+/'));
 }
 
 
-function generateToken($payload, $secret_key) {
+function generateToken($payload) {
+    global $secret_key;
     $header = json_encode(["alg" => "HS256", "typ" => "JWT"]);
     $headerEncoded = base64_url_encode($header);
     $payloadEncoded = base64_url_encode(json_encode($payload));
@@ -23,7 +24,8 @@ function generateToken($payload, $secret_key) {
     return $headerEncoded . '.' . $payloadEncoded . '.' . $signatureEncoded;
 }
 
-function decodeToken($token, $secret_key) {
+function decodeToken($token) {
+    global $secret_key;
     list($headerEncoded, $payloadEncoded, $signatureEncoded) = explode('.', $token);
 
     $header = json_decode(base64_url_decode($headerEncoded), true);

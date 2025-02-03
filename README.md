@@ -1,1 +1,2 @@
-# Classroom
+# EClassroom
+Manage classrooms online

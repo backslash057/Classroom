@@ -1,5 +1,15 @@
 <?php
+require "auth.php";
 
+$user = null;
+if(isset($_COOKIE["auth_token"])) {
+    $token = $_COOKIE["auth_token"];
+    $playload = decodeToken($_COOKIE["auth_token"]);
+    
+    // TODO: verify if the token is not expired before
+    $user = $playload;
+
+}
 ?>
 
 <!DOCTYPE html>
@@ -13,11 +23,8 @@
     <h1>Page d'acceuil</h1>
 
 <?php
-    // verify authentification
-
-    if(false){
-        // echo "Bienvenue $_COOKIE['user_id')";
-        // echo "Bienvenue $_COOKIE['names'] $_COOKIE['surnames']($_COOKIE['email'])";
+    if($user != null){
+        echo "Bienvenue $user['names'] $user['surnames']($user['email'])";
     }
     else {
 ?>
@@ -26,7 +33,6 @@
 <?php
     }
 ?>
-
-    <script src="/static/js/debug.js"></script>
+    <!-- <script src="/static/js/debug.js"></script> -->
 </body>
 </html>
