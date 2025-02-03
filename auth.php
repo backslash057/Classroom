@@ -34,7 +34,7 @@ function decodeToken($token) {
     $signature = base64_url_decode($signatureEncoded);
     $checkSignature = hash_hmac('sha256', $headerEncoded . '.' . $payloadEncoded, $secret_key, true);
 
-    if ($signature === $checkSignature) {
+    if ($signature === $checkSignature && $payload["expires"] > time()) {
         return $payload;
     }
 

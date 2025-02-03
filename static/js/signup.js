@@ -15,17 +15,17 @@ function signup(path, datas) {
         }
     ).then(response => response.json()
     ).then((data) => {
-        console.log(data);
-
         if(data.success) {
             display_result(data.success, true);
             /*
                 TODO:
                     redirect the user manually to where he left off
-                    his navigation (the page which asked for
+                    his navigation (the page that asked for
                     authentification)
-                OR automativally send to home ( / )
             */
+            setTimeout(() => {
+                window.location.replace("/");
+            }, 1000);
         }
         else if(data.error) display_result(data.error, false);
     })
@@ -45,6 +45,5 @@ form.addEventListener("submit", event => {
         datas[value] = key;
     });
 
-    console.log(datas);
     signup(form.action, datas);
 });

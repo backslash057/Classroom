@@ -2,19 +2,12 @@
 require "dbManager.php";
 require "auth.php";
 
+$user = isset($_COOKIE["auth_token"])? decodeToken($_COOKIE["auth_token"]): null;
+
 // Redirect the user to home if he is already authentificated
-if(isset($_COOKIE["auth_token"])) {
-    $token = $_COOKIE["auth_token"];
-    
-    $playload = decodeToken($token);
-    
-    if($playload != null) {
-        // TODO: find a way to redirect the user to the previous page
-        // (when possible)
-        // TODO: change this route to /logout when routes are switched to dynamic
-        header("Location: /logout.php");
-        exit();
-    }
+if($user != null) {
+    header("Location: /");
+    exit();
 }
 
 
@@ -60,7 +53,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             "surnames" => $surnames,
             "email" => $email,
             // TODO: change the expiration limit and load from a global config
-            "expire" => time() +(60 * 60 * 24 * 30)
+            "expires" => time() +(60 * 60 * 24 * 30)
         ]);
 
         setcookie("auth_token", $token, [

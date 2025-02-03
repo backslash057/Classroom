@@ -1,15 +1,8 @@
 <?php
 require "auth.php";
 
-$user = null;
-if(isset($_COOKIE["auth_token"])) {
-    $token = $_COOKIE["auth_token"];
-    $playload = decodeToken($_COOKIE["auth_token"]);
-    
-    // TODO: verify if the token is not expired before
-    $user = $playload;
+$user = isset($_COOKIE["auth_token"])? decodeToken($_COOKIE["auth_token"]): null;
 
-}
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +17,9 @@ if(isset($_COOKIE["auth_token"])) {
 
 <?php
     if($user != null){
-        echo "Bienvenue $user['names'] $user['surnames']($user['email'])";
+        echo "Bienvenue {$user['names']} {$user['surnames']}({$user['email']})";
+        echo "<br>";
+        echo "<a href='/logout.php'>Logout</a>";
     }
     else {
 ?>
