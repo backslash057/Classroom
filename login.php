@@ -10,7 +10,54 @@ if($user != null) {
 
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
+    $data = json_decode(file_get_contents("php://input"), true);
+    
+    if(!$data) {
+        http_response_code(400); // HTTP 400: Bad request
+        echo json_encode(["error" => "Invalid data format. JSON expected"]);
+        exit;
+    }
 
+    $email = filter_var(trim($data["email"]), FILTER_VALIDATE_EMAIL);
+    $password = password_hash($data["pwd"], PASSWORD_BCRYPT);
+
+    if(!$email) {
+        http_response_code(400); // HTTP 400: Bad request
+        echo json_encode(["error" => "Invalid email adress"]);
+        exit;
+    }
+
+    $user = dbManager::check_user(
+        $email, $password
+    );
+
+    if($user == null) {
+        http_response_code(404); // HTTP 500: Internal server error
+        echo json_encode([
+            "error" => "Adresse email ou mot de passe incorrect"
+        ]);
+    }
+    else {
+        $token = generateToken([
+            "user_id" => $user['user_id'],
+            "names" => $user["names"],
+            "surnames" => $user["surnames"],
+            "email" => $user["email"],
+            // TODO: change the expiration limit and load from a global config
+            "expires" => time() +(60 * 60 * 24 * 30)
+        ]);
+
+        setcookie("auth_token", $token, [
+            "httponly" => true,  // Prevent XSS atack via Javascript
+            "secure" => true,    // Send only over HTTPS
+            "samesite" => "Strict" // Prevent CSRF attacks
+        ]);
+        
+        http_response_code(200); // HTTP 200: Ok
+        echo json_encode([
+            "success" => "Log in succesful"
+        ]);
+    }
 }
 else {
 ?>
