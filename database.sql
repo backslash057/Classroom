@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS ClassroomUser(
   user_id INT PRIMARY KEY AUTO_INCREMENT,
-  email VARCHAR(50),
+  email VARCHAR(50) UNIQUE NOT NULL,
   names VARCHAR(100) NOT NULL,
   surnames VARCHAR(100) DEFAULT NULL,
   gender ENUM('M', 'F') DEFAULT NULL,
@@ -13,8 +13,8 @@ CREATE TABLE IF NOT EXISTS Course(
   creator_id INT NOT NULL,
   creation_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   title VARCHAR(30) NOT NULL, 
-  description VARCHAR(100) DEFAULT NULL,
-  code CHAR(5) NOT NULL,
+  description VARCHAR(100) DEFAULT "",
+  code CHAR(6) NOT NULL,
   CONSTRAINT FOREIGN KEY (creator_id) REFERENCES ClassroomUser(user_id)
 );
 
