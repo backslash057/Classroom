@@ -32,6 +32,30 @@ class DbManager {
 
         return $insertion_id;
     }
+
+    public static function check_user($email, $password) {
+        $db = new mysqli("localhost", "root", "", "classroom");
+
+        if ($db->connect_error) {
+            error_log("Database connection failed: " . $db->connect_error);
+            return null;
+        }
+
+        $stmt = $db->prepare("SELECT * FROM ClassroomUser WHERE email=?");
+        $stmt->bind_param("s", $email);
+
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+
+        $stmt->close();
+        $db->close();
+
+        if ($user && password_verify($password, $user['password'])) {
+            return $user;
+        }
+
+        return null;
+    }
 }
 
 
