@@ -1,18 +1,13 @@
-TODO:
+DONE: fix auth.php decoder to go simpler according to (https://base64.guru/developers/php/examples/base64url)
 
-fix auth.php decoder to go simpler according to (https://base64.guru/developers/php/examples/base64url)
+DONE: handle the variable sent for authentification, actually store them to database, set a cookie
 
-handle the variable sent for authentification, actually store them to database, set a cookis
 
-javascript when the request is accepted
+check if the email adress is unique on signup
 
-finish the login part
+clean up the suthentification system before moving
 
-finish the logout
 
-clean and round up aith authentification
-
-push to githug
-
-TODO RESEARCH:
+RESEARCH:
     how to set the JWT token in a way that the browser will (automatically) use that in Authrozation header with 'Bearer' for the future requests
+

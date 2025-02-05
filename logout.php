@@ -24,7 +24,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 else if($_SERVER["REQUEST_METHOD"] == "GET") {
 ?>
     <!DOCTYPE html>
-    <html lang="en">
+    <html lang="fr>
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,7 +35,7 @@ else if($_SERVER["REQUEST_METHOD"] == "GET") {
         if($user == null) {
             echo "Vous etes deja deconnecté";
             echo "<br>";
-            echo "<a href='/'>Home page</a>";
+            echo "<a href='/'>Acceuil</a>";
         }
         else {
     ?>
