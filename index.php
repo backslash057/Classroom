@@ -1,7 +1,11 @@
 <?php
-require "auth.php";
 
-$user = isset($_COOKIE["auth_token"])? decodeToken($_COOKIE["auth_token"]): null;
+require_once "auth.php";
+require_once "dbManager.php";
+
+// Try, load and verify the user datas from his cookies
+$user = try_authentification();
+
 
 ?>
 
@@ -10,7 +14,7 @@ $user = isset($_COOKIE["auth_token"])? decodeToken($_COOKIE["auth_token"]): null
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome - Classroom</title>
+    <title>Acceuil - Classroom</title>
 </head>
 <body>
     <h1>Page d'acceuil</h1>
