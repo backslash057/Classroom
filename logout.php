@@ -1,25 +1,27 @@
 <?php
 
-require "auth.php";
+require_once "auth.php";
 
-$user = isset($_COOKIE["auth_token"])? decodeToken($_COOKIE["auth_token"]): null;
 
+// Try, load and verify the user datas from his cookies
+$user = try_authentification();
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
     if($user == null) {
         echo json_encode(["error" => "Vous etes deja deconnecté"]);
         exit;
     }
-    
-    setcookie("auth_token", "", [
-        "expires" => time() - 3600,
-        "path" => "/",
-        "secure" => true, 
-        "httponly" => true,
-        "samesite" => "Strict"
-    ]);
+    else {
+        setcookie("auth_token", "", [
+            "expires" => time() - 3600,
+            "path" => "/",
+            "secure" => true, 
+            "httponly" => true,
+            "samesite" => "Strict"
+        ]);
 
-    echo json_encode(["success" => "Vous etes maintenant deconnecté du site"]);
+        echo json_encode(["success" => "Vous etes maintenant deconnecté du site"]);
+    }
 }
 else if($_SERVER["REQUEST_METHOD"] == "GET") {
 ?>
@@ -29,17 +31,25 @@ else if($_SERVER["REQUEST_METHOD"] == "GET") {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Deconnexion - Classroom</title>
+        <meta charset="UTF-8">
     </head>
     <body>
     <?php
         if($user == null) {
-            echo "Vous etes deja deconnecté";
-            echo "<br>";
-            echo "<a href='/'>Acceuil</a>";
+    ?>
+            <span>Vous etes deja deconnecté</span>
+            <br>
+            <a href='/'>Acceuil</a>
+    <?php
         }
         else {
     ?>
-        <div class="output"></div>
+        <div class="output">
+            <?php
+                echo "Vous etes connecté en tant que {$user['names']} {$user['surnames']}({$user['email']})";
+            ?>
+                
+        </div>
         <button class="button">Me deconnecter</button>
         
         <script>
