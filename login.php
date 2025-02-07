@@ -4,7 +4,7 @@ require "auth.php";
 $user = isset($_COOKIE["auth_token"])? decodeToken($_COOKIE["auth_token"]): null;
 
 if($user != null) {
-    header("Location: /");
+    header("Location: /logout.php");
     exit();
 }
 
@@ -71,15 +71,19 @@ else {
     <body>
         <h1>Connexion</h1>
 
-        <form action="/" method="POST">
-            <table>
+        <form action="/login.php" method="POST" class="form">
+            <table style="border: 1px solid black">
                 <tr>
-                    <td>Noms</td>
-                    <td><input type="email" class="email"></td>
+                    <td>Email</td>
+                    <td><input type="email" class="email" required></td>
                 </tr>
                 <tr>
                     <td>Mot de passe</td>
-                    <td><input type="password" class="password"></td>
+                    <td><input type="password" class="password" required></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="submit" class="submit" value="Se connecter"></td>
                 </tr>
             </table>
         </form>
@@ -88,6 +92,7 @@ else {
         <a href="signup.php">S'inscrire</a>
 
         <!-- <script src="/static/js/debug.js"></script> -->
+        <script src="/static/js/login.js"></script>
     </body>
     </html>
 

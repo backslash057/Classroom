@@ -6,7 +6,7 @@ function display_result(message, positive) {
 }
 
 
-function signup(path, datas) {
+function login(path, datas) {
     fetch(path,
         {
             headers: {"Content-Type" : 'application/json'},
@@ -17,12 +17,8 @@ function signup(path, datas) {
     ).then((data) => {
         if(data.success) {
             display_result(data.success, true);
-            /*
-                TODO:
-                    redirect the user manually to where he left off
-                    his navigation (the page that asked for
-                    authentification)
-            */
+
+            // after succesful login, redirect the user to home
             setTimeout(() => {
                 window.location.replace("/");
             }, 1000);
@@ -40,10 +36,13 @@ form.addEventListener("submit", event => {
 
     let formData = new FormData(event.target);
     let datas = {};
+
+    console.log(form, formData, new FormData(form));
     
     formData.forEach((key, value) => {
         datas[value] = key;
     });
 
-    signup(form.action, datas);
+    console.log(datas);
+    // login(form.action, datas);
 });
