@@ -2,12 +2,18 @@ DONE: fix auth.php decoder to go simpler according to (https://base64.guru/devel
 
 DONE: handle the variable sent for authentification, actually store them to database, set a cookie
 
-actually distinguish the case when there is an error to when the request is impossible in the authentification system
+DONE: actually distinguish the case when there is an error to when the request is impossible in the authentification system
 
-check if the email adress is unique on signup
+DONE: check if the email adress is unique on signup
 
 clean up the suthentification system before moving
 
+verify the logic in logout.js (the code is far from being clean)
+
+
+<todo name="session expiry alert" prority="optional">
+    display "your last session expired Login to continue" when the user launch the site home page;
+</todo>
 
 RESEARCH:
     how to set the JWT token in a way that the browser will (automatically) use that in Authrozation header with 'Bearer' for the future requests
