@@ -1,12 +1,15 @@
 <?php
-require "dbManager.php";
-require "auth.php";
 
-$user = isset($_COOKIE["auth_token"])? decodeToken($_COOKIE["auth_token"]): null;
+require_once "auth.php";
+require_once "dbManager.php";
 
-// Redirect the user to home if he is already authentificated
+
+// Try, load and verify the user datas from his cookies
+$user = try_authentification();
+
+// Redirect the user to logout if he is already connected
 if($user != null) {
-    header("Location: /");
+    header("Location: /logout.php");
     exit();
 }
 
@@ -20,6 +23,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
+    // TODO: missing data is not handled (for optional  datas)
     $names = filter_var(trim($data["names"]), FILTER_SANITIZE_STRING);
     $surnames = isset($data["surnames"]) ? filter_var(trim($data["surnames"]), FILTER_SANITIZE_STRING) : null;
     $email = filter_var(trim($data["email"]), FILTER_VALIDATE_EMAIL);
@@ -30,28 +34,21 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if(!$email) {
         http_response_code(400); // HTTP 400: Bad request
-        echo json_encode(["error" => "Invalid email adress"]);
+        echo json_encode(["error" => "Invalid email address"]);
         exit;
     }
 
-    $insert_id = DbManager::save_user(
-        $names, $surnames,
-        $email, $birth_date,
-        $gender, $password
-    );
-    
-    if($insert_id < 0) {
-        http_response_code(500); // HTTP 500: Internal server error
-        echo json_encode([
-            "error" => "Erreur de sauvegarde des données. Reessayez plus tard"
-        ]);
-    }
-    else {
+
+    try {
+        $insert_id = DbManager::save_user(
+            $names, $surnames,
+            $email, $birth_date,
+            $gender, $password
+        );
+
         $token = generateToken([
             "user_id" => $insert_id,
-            "names" => $names,
-            "surnames" => $surnames,
-            "email" => $email,
+
             // TODO: change the expiration limit and load from a global config
             "expires" => time() +(60 * 60 * 24 * 30)
         ]);
@@ -59,15 +56,31 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         setcookie("auth_token", $token, [
             "httponly" => true,  // Prevent XSS atack via Javascript
             "secure" => true,    // Send only over HTTPS
-            "samesite" => "Strict" // Prevent CSRF attacks
+            "samesite" => "Strict", // Prevent CSRF attacks
+            "expires" => time() + (60 * 60 * 24 * 30)
         ]);
         
         http_response_code(201); // HTTP 201: Created
         echo json_encode([
-            "success" => "User was created"
+            "success" => "Authentification reussie"
         ]);
-    }
 
+    } catch(mysqli_sql_exeption $e) {
+        error_log("SQL error: " . $e);
+
+        if($e->getCode() == 1062) { // Mysqli duplicate entry error
+            http_response_code(409); // HTTP 409: Conflict
+            echo json_encode([
+                "error" => "Un compte existe deja avec cette adresse email"
+            ]);
+        }
+        else {
+            http_response_code(500); // HTTP 500: Internal server error
+            echo json_encode([
+                "error" => "Une erreur est survenue. Veuillez reessayer"
+            ]);
+        }
+    }
 
 }
 else if($_SERVER["REQUEST_METHOD"] == "GET") {
@@ -83,10 +96,10 @@ else if($_SERVER["REQUEST_METHOD"] == "GET") {
 <body>
     <h1>Inscription</h1>
 
-    <div class="error_frame"></div>   <!-- dinamically display thge error here -->
+    <div class="error_frame"></div>   <!-- dinamically display the error here -->
 
     <form action="/signup.php" method="POST" class="form">
-        <table>
+        <table style="border: 1px solid black">
             <tr>
                 <td>Noms</td>
                 <td><input type="text" name="names" class="names" required></td>
@@ -106,7 +119,7 @@ else if($_SERVER["REQUEST_METHOD"] == "GET") {
             <tr>
                 <td>Genre</td>
                 <td>
-                    <select name="gender" class="">
+                    <sele
                         <option value="M">Homme</option>
                         <option value="F">Femme</option>
                     </select>
@@ -123,10 +136,10 @@ else if($_SERVER["REQUEST_METHOD"] == "GET") {
         </table>
     </form>
     <br>
-    <span>Pas encore de compte?</span>
-    <a href="signup.php">S'inscrire</a>
+    <span>Deja un compte?</span>
+    <a href="login.php">Se connecter</a>
 
-    <script src="/static/js/debug.js"></script>
+    <!-- <script src="/static/js/debug.js"></script> -->
     <script src="/static/js/signup.js"></script>
 </body>
 </html>

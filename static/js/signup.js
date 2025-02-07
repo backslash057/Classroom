@@ -1,8 +1,10 @@
 let form = document.querySelector(".form");
+let error_frame = document.querySelector(".error_frame");
 
 function display_result(message, positive) {
-    // TODO: Actually display the result in the error_frame element
-    console.log("positive: " + positive + ", message: " + message);
+    error_frame.innerText = message;
+    // TODO: Modifiy the color of error_frames
+    //console.log("positive: " + positive + ", message: " + message);
 }
 
 
@@ -13,24 +15,24 @@ function signup(path, datas) {
             method: "POST",
             body: JSON.stringify(datas)
         }
-    ).then(response => response.json()
-    ).then((data) => {
+    )
+    .then(response => {
+        return response.json()
+    })
+    .then((data) => {
         if(data.success) {
             display_result(data.success, true);
-            /*
-                TODO:
-                    redirect the user manually to where he left off
-                    his navigation (the page that asked for
-                    authentification)
-            */
+
             setTimeout(() => {
+                // rediurect the user to home page
                 window.location.replace("/");
             }, 1000);
         }
         else if(data.error) display_result(data.error, false);
     })
     .catch(e => {
-        display_result("An error occured. Try again later", false);
+        console.log(e);
+        display_result("Une erreur est survenue. Veuillez reesayer", false);
     });
 }
 

@@ -1,6 +1,7 @@
 <?php
 
 require 'config.php';
+require 'dbManager.php';
 
 
 function base64_url_encode($data) {
@@ -36,6 +37,30 @@ function decodeToken($token) {
 
     if ($signature === $checkSignature && $payload["expires"] > time()) {
         return $payload;
+    }
+
+    return null;
+}
+
+/*
+Verifies the token, verify the user in database
+@return $user the user fetched from the database
+*/
+function try_authentification() {
+    if(isset($_COOKIE['auth_token'])) {
+        $token = $_COOKIE['auth_token'];
+        $payload = decodeToken($token);
+
+        if($payload != null && isset($payload["expires"]) && $payload['expires']>time()) {
+            if(isset($payload["user_id"])) {
+                try {
+                    $user = DbManager::find_user($payload["user_id"]);
+                    return $user;
+                } catch(mysqli_exception $e) {
+                    error_log("[auth.php] SQL error when checking user from database: " + e->getMessage());
+                }
+            }
+        }
     }
 
     return null;
