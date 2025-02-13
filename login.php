@@ -61,40 +61,41 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 else {
 ?>
-    <!DOCTYPE html>
-    <html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-    </head>
-    <body>
-        <h1>Connexion</h1>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - Classroom</title>
+</head>
+<body>
+    <h1>Connexion</h1>
 
-        <form action="/login.php" method="POST" class="form">
-            <table style="border: 1px solid black">
-                <tr>
-                    <td>Email</td>
-                    <td><input type="email" class="email" required></td>
-                </tr>
-                <tr>
-                    <td>Mot de passe</td>
-                    <td><input type="password" class="password" required></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><input type="submit" class="submit" value="Se connecter"></td>
-                </tr>
-            </table>
-        </form>
-        <br>
-        <span>Pas encore de compte?</span>
-        <a href="signup.php">S'inscrire</a>
+    <div class="error_frame"></div>   <!-- dinamically display the error here -->
+    <form action="/login.php" method="POST" class="form">
+        <table style="border: 1px solid black">
+            <tr>
+                <td>Email</td>
+                <td><input type="email" name="email" class="email" required></td>
+            </tr>
+            <tr>
+                <td>Mot de passe</td>
+                <td><input type="password" name="pwd" class="password" required></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" class="submit" value="Se connecter"></td>
+            </tr>
+        </table>
+    </form>
+    <br>
+    <span>Pas encore de compte?</span>
+    <a href="signup.php">S'inscrire</a>
 
-        <!-- <script src="/static/js/debug.js"></script> -->
-        <script src="/static/js/login.js"></script>
-    </body>
-    </html>
+    <!-- <script src="/static/js/debug.js"></script> -->
+    <script src="/static/js/login.js"></script>
+</body>
+</html>
 
 <?php
 }
