@@ -1,8 +1,10 @@
 let form = document.querySelector(".form");
+let error_frame = document.querySelector(".error_frame");
 
 function display_result(message, positive) {
-    // TODO: Actually display the result in the error_frame element
-    console.log("positive: " + positive + ", message: " + message);
+    error_frame.innerText = message;
+    // TODO: Modifiy the color of error_frames
+    //console.log("positive: " + positive + ", message: " + message);
 }
 
 
@@ -26,7 +28,8 @@ function login(path, datas) {
         else if(data.error) display_result(data.error, false);
     })
     .catch(e => {
-        display_result("An error occured. Try again later", false);
+        // TODO: empty all the form entries here
+        display_result("Une erreur est survenue. Veuillez reesayer", false);
     });
 }
 
@@ -36,13 +39,11 @@ form.addEventListener("submit", event => {
 
     let formData = new FormData(event.target);
     let datas = {};
-
-    console.log(form, formData, new FormData(form));
     
     formData.forEach((key, value) => {
         datas[value] = key;
     });
 
     console.log(datas);
-    // login(form.action, datas);
+    login(form.action, datas);
 });

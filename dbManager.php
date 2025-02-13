@@ -32,19 +32,19 @@ class DbManager {
 
         $db = new mysqli("localhost", "root", "", "classroom");
 
-        $stmt = $db->prepare("SELECT * FROM ClassroomUser WHERE email=?");
+        $stmt = $db->prepare("SELECT user_id, password FROM ClassroomUser WHERE email=?");
         $stmt->bind_param("s", $email);
 
         $stmt->execute();
 
         $result = $stmt->get_result();
         $user = $result->fetch_assoc();
-
+        
         $stmt->close();
         $db->close();
 
         if ($user && password_verify($password, $user['password'])) {
-            return $user;
+            return $user['user_id'];
         }
 
         return null;
