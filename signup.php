@@ -65,7 +65,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             "success" => "Authentification reussie"
         ]);
 
-    } catch(mysqli_sql_exeption $e) {
+    } catch(mysqli_sql_exception $e) {
         error_log("SQL error: " . $e);
 
         if($e->getCode() == 1062) { // Mysqli duplicate entry error
@@ -119,13 +119,14 @@ else if($_SERVER["REQUEST_METHOD"] == "GET") {
             <tr>
                 <td>Genre</td>
                 <td>
-                    <sele
+                    <select name="gender">
                         <option value="M">Homme</option>
                         <option value="F">Femme</option>
                     </select>
                 </td>
             </tr>
             <tr>
+                <!-- TODO: add a button to reveal the password -->
                 <td>Mot de passe</td>
                 <td><input type="password" name="pwd" class="password" required></td>
             </tr>

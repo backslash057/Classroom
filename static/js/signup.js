@@ -31,7 +31,7 @@ function signup(path, datas) {
         else if(data.error) display_result(data.error, false);
     })
     .catch(e => {
-        console.log(e);
+        // TODO: empty all the form entries here
         display_result("Une erreur est survenue. Veuillez reesayer", false);
     });
 }
@@ -47,5 +47,6 @@ form.addEventListener("submit", event => {
         datas[value] = key;
     });
 
+    console.log(datas);
     signup(form.action, datas);
 });
