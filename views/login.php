@@ -1,15 +1,11 @@
 <?php
 
+require_once $_SERVER["DOCUMENT_ROOT"] . "/controllers/authController.php";
+
 
 // Try, load and verify the user datas from his cookies
-$user = try_authentification();
-
-// Redirect the user to logout if he is already connected
-if($user != null) {
-    header("Location: /logout.php");
-    exit;
-}
-
+$controller = new Authcontroller();
+$userData = $controller->checkAuthentification();
 
 ?>
 
@@ -25,7 +21,7 @@ if($user != null) {
     <h1>Connexion</h1>
 
     <div class="error_frame"></div>   <!-- dinamically display the error here -->
-    <form action="/login.php" method="POST" class="form">
+    <form action="/login" method="POST" class="form">
         <table style="border: 1px solid black">
             <tr>
                 <td>Email</td>
@@ -34,7 +30,7 @@ if($user != null) {
             <tr>
                 <!-- TODO: add a button to reveal the password -->
                 <td>Mot de passe</td>
-                <td><input type="password" name="pwd" class="password" required></td>
+                <td><input type="password" name="password" class="password" required></td>
             </tr>
             <tr>
                 <td></td>
@@ -44,9 +40,9 @@ if($user != null) {
     </form>
     <br>
     <span>Pas encore de compte?</span>
-    <a href="signup.php">S'inscrire</a>
+    <a href="/signup">S'inscrire</a>
 
     <!-- <script src="/static/js/debug.js"></script> -->
-    <script src="/static/js/login.js"></script>
+    <script src="views/static/js/login.js"></script>
 </body>
 </html>

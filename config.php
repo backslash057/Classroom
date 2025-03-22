@@ -1,7 +1,7 @@
 <?php
 
 $host = 'localhost';
-$dbname = 'todo_db';
+$dbname = 'classroom';
 $username = 'root'; 
 $password = '';
 

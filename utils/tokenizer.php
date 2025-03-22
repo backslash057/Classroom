@@ -4,14 +4,11 @@ class Tokenizer {
     private static $secretKey = "i7gDGHTKGcXe36UzRiPbuexJvzXC2HFhGU7enz25bIEAK3kd7eT";
 
     // Generate JWT Token
-    public static function generateToken($userId) {
-        $createdAt = time();
-        $expirationTime = $createdAt + 3600;
-
+    public static function generateToken($email) {
         $payload = [
-            'iat' => $createdAt,
-            'exp' => $expirationTime,
-            'sub' => $userId
+            'createdAt' => time(),
+            'expires' => time() + 60*60*24,
+            'email' => $email
         ];
 
         return self::encodeJWT($payload);

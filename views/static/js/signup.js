@@ -8,24 +8,28 @@ function display_result(message, positive) {
 }
 
 
-function login(path, datas) {
+function signup(path, datas) {
     fetch(path,
         {
             headers: {"Content-Type" : 'application/json'},
             method: "POST",
             body: JSON.stringify(datas)
         }
-    ).then(response => response.json()
-    ).then((data) => {
+    )
+    .then(response => {
+        console.log(response);
+        return response.json();
+    })
+    .then((data) => {
         if(data.success) {
-            display_result(data.success, true);
+            display_result(data.message, true);
 
-            // after succesful login, redirect the user to home
             setTimeout(() => {
+                // rediurect the user to home page
                 window.location.replace("/");
             }, 1000);
         }
-        else if(data.error) display_result(data.error, false);
+        else display_result(data.message, false);
     })
     .catch(e => {
         // TODO: empty all the form entries here
@@ -45,5 +49,5 @@ form.addEventListener("submit", event => {
     });
 
     console.log(datas);
-    login(form.action, datas);
+    signup(form.action, datas);
 });
