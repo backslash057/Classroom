@@ -13,15 +13,13 @@ class AuthController {
         $request = json_decode(file_get_contents('php://input'), true);
 
         // TODO: handle missing/optional datas
-        $email = filter_var(trim($data["email"]), FILTER_VALIDATE_EMAIL);
-        $password = password_hash($data["pwd"], PASSWORD_BCRYPT);
+        $email = filter_var(trim($request["email"]), FILTER_VALIDATE_EMAIL);
+        $password = isset($request['password'])? $request["password"] : '';
 
         if(!$email) return ['success'=>false, 'message' => 'Invalid email address'];
 
-        
-        $user = $this->getUserByEmail($email);
-        $matches = $user && password_verify($password, $user['password']);
-        
+        $matches = $this->authManager->checkUser($email, $password);
+
         if ($matches){
             $token = Tokenizer::generateToken($email);
 
@@ -47,16 +45,18 @@ class AuthController {
         $email = filter_var(trim($request["email"]), FILTER_VALIDATE_EMAIL);
         $birth_date = isset($request["birth_date"]) ? filter_var($request["birth_date"], FILTER_SANITIZE_STRING) : null;
         $gender = isset($request["gender"]) ? filter_var($request["gender"], FILTER_SANITIZE_STRING) : null;
+        $role = filter_var($request["role"], FILTER_SANITIZE_STRING);
         $password = password_hash($request["password"], PASSWORD_BCRYPT);
 
         if(!$email) return ['success'=>false, 'message' => 'Invalid email address'];
+        if(!$role) return ['success'=>false, 'message' => 'A role must be specified'];
         
         if ($this->authManager->getUserByEmail($email)) {
             return ['success'=>true, 'message' => 'A user with that email address already exists'];
         }
         
         $userId = $this->authManager->createUser(
-            $names, $surnames, $email, $birth_date, $gender, $password
+            $names, $surnames, $email, $birth_date, $gender, $role, $password
         );
         
         if ($userId) {
