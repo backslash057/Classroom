@@ -21,7 +21,7 @@ $userData = $controller->checkAuthentification();
 <?php
     if($userData == null) {
 ?>
-        <span>Vous etes deja deconnecté</span>
+        <span>You are already disconnected</span>
         <br>
         <a href='/'>Acceuil</a>
 <?php

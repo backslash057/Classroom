@@ -7,6 +7,11 @@ require_once $_SERVER["DOCUMENT_ROOT"] . "/controllers/authController.php";
 $controller = new Authcontroller();
 $userData = $controller->checkAuthentification();
 
+if($userData) {
+    header("Location: /logout");
+    exit;
+}
+
 ?>
 
 
@@ -43,6 +48,6 @@ $userData = $controller->checkAuthentification();
     <a href="/signup">S'inscrire</a>
 
     <!-- <script src="/static/js/debug.js"></script> -->
-    <script src="views/static/js/login.js"></script>
+    <script src="views/static/js/auth.js"></script>
 </body>
 </html>
