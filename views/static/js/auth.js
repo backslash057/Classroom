@@ -8,24 +8,20 @@ function display_result(message, positive) {
 }
 
 
-function signup(path, datas) {
+function authenticate(path, datas) {
     fetch(path,
         {
             headers: {"Content-Type" : 'application/json'},
             method: "POST",
             body: JSON.stringify(datas)
         }
-    )
-    .then(response => {
-        console.log(response);
-        return response.json();
-    })
-    .then((data) => {
+    ).then(response => response.json()
+    ).then((data) => {
         if(data.success) {
             display_result(data.message, true);
 
+            // redirect the user to home page
             setTimeout(() => {
-                // rediurect the user to home page
                 window.location.replace("/");
             }, 1000);
         }
@@ -33,7 +29,7 @@ function signup(path, datas) {
     })
     .catch(e => {
         // TODO: empty all the form entries here
-        display_result("Une erreur est survenue. Veuillez reesayer", false);
+        display_result("An error occured. Try again later", false);
     });
 }
 
@@ -49,5 +45,5 @@ form.addEventListener("submit", event => {
     });
 
     console.log(datas);
-    signup(form.action, datas);
+    authenticate(form.action, datas);
 });
