@@ -1,0 +1,14 @@
+controller l'unicité de l'adresse email
+
+
+
+{
+  "names": "Aphrodite Petersen",
+  "surnames": "Gillespie",
+  "email": "xypazex@mailinator.com",
+  "phone": "+1 (456) 384-3761",
+  "birth_date": "1985-01-11",
+  "password" : "Pa$$w0rd!",
+  "gender" : "M",
+  "role": "teacher"
+}

@@ -37,8 +37,12 @@ if($userData) {
                 <td><input type="text" name="surnames" class="surnames"></td>
             </tr>
             <tr>
-                <td>email</td>
-                <td><input type="text" name="email" class="email" required></td>
+                <td>Email</td>
+                <td><input type="email" name="email" class="email" required></td>
+            </tr>
+            <tr>
+                <td>Phone number</td>
+                <td><input type="text" name="phone" class="phone" required></td>
             </tr>
             <tr>
                 <td>Date de naissance</td>
