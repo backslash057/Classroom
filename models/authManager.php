@@ -1,7 +1,6 @@
 <?php
 
-$config = require $_SERVER['DOCUMENT_ROOT'] . '/config.php';
-
+require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 
 class AuthManager {
     protected $db;
@@ -16,22 +15,22 @@ class AuthManager {
         $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
-    public function createUser($names, $surnames, $email, $birth_date, $gender, $role, $password) {
+    public function createUser($names, $surnames, $email, $phone, $birth_date, $gender, $role, $password) {
         $hashed = password_hash($password, PASSWORD_BCRYPT);
 
         $stmt = $this->db->prepare("
-            INSERT INTO Users(names, surnames, email, birth_date, gender, role, password)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO Users(names, surnames, email, phone, birth_date, gender, role, password)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ");
         $stmt->execute([
-            $names, $surnames, $email, $birth_date, $gender, $role, $hashed
+            $names, $surnames, $email, $phone, $birth_date, $gender, $role, $hashed
         ]);
 
         return $this->db->lastInsertId();
     }
 
     public function getUserByEmail($email) {
-        $stmt = $this->db->prepare("SELECT names, surnames, email, birth_date, gender, role FROM Users WHERE email = ?");
+        $stmt = $this->db->prepare("SELECT names, surnames, email, phone, birth_date, gender, role FROM Users WHERE email = ?");
         $stmt->execute([$email]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
@@ -40,9 +39,6 @@ class AuthManager {
         $stmt = $this->db->prepare("SELECT password FROM Users WHERE email = ?");
         $stmt->execute([$email]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        var_export(password_get_info($user["password"]));
-        var_export(password_get_info($password));
         
         if($user && password_verify($password, $user['password'])) {
         

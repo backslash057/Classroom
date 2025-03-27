@@ -1,6 +1,7 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/utils/tokenizer.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/models/authManager.php';
 
 class AuthController {
     protected $authManager;
@@ -25,7 +26,6 @@ class AuthController {
 
             setcookie("auth_token", $token, [
                 "httponly" => true,  // Prevent XSS atack via Javascript
-                "secure" => true,    // Send only over HTTPS
                 "samesite" => "Strict", // Prevent CSRF attacks
                 "expires" => time() + (60 * 60 * 24 * 30) // 30 days
             ]);
@@ -43,6 +43,7 @@ class AuthController {
         $names = filter_var(trim($request["names"]), FILTER_SANITIZE_STRING);
         $surnames = isset($request["surnames"]) ? filter_var(trim($request["surnames"]), FILTER_SANITIZE_STRING) : null;
         $email = filter_var(trim($request["email"]), FILTER_VALIDATE_EMAIL);
+        $phone = filter_var(trim($request["phone"], FILTER_SANITIZE_STRING));
         $birth_date = isset($request["birth_date"]) ? filter_var($request["birth_date"], FILTER_SANITIZE_STRING) : null;
         $gender = isset($request["gender"]) ? filter_var($request["gender"], FILTER_SANITIZE_STRING) : null;
         $role = filter_var($request["role"], FILTER_SANITIZE_STRING);
@@ -50,13 +51,14 @@ class AuthController {
 
         if(!$email) return ['success'=>false, 'message' => 'Invalid email address'];
         if(!$role) return ['success'=>false, 'message' => 'A role must be specified'];
+        if(!$phone) return ['success'=>false, 'message' => 'A phone number must be specified'];
         
         if ($this->authManager->getUserByEmail($email)) {
             return ['success'=>true, 'message' => 'A user with that email address already exists'];
         }
         
         $userId = $this->authManager->createUser(
-            $names, $surnames, $email, $birth_date, $gender, $role, $password
+            $names, $surnames, $email, $phone, $birth_date, $gender, $role, $password
         );
         
         if ($userId) {
@@ -64,7 +66,6 @@ class AuthController {
 
             setcookie("auth_token", $token, [
                 "httponly" => true,  // Prevent XSS atack via Javascript
-                "secure" => true,    // Send only over HTTPS
                 "samesite" => "Strict", // Prevent CSRF attacks
                 "expires" => time() + (60 * 60 * 24 * 30) // 30 days
             ]);
@@ -79,7 +80,6 @@ class AuthController {
         setcookie("auth_token", "", [
             "expires" => time() - 3600,
             "path" => "/",
-            "secure" => true, 
             "httponly" => true,
             "samesite" => "Strict"
         ]);
