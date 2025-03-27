@@ -1,11 +1,14 @@
 <?php
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/taskController.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/courseController.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/authController.php';
 
 
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
+$datetime = date("D M d H:i:s Y");
+
+error_log($method . " " . $requestUri);
 
 if($requestUri == "/") {
     require_once($_SERVER["DOCUMENT_ROOT"] . "/views/index.php");
@@ -48,6 +51,13 @@ else if($requestUri == "/logout") {
     else if($method == "GET"){
         require_once $_SERVER["DOCUMENT_ROOT"] . "/views/logout.php";
     }
+}
+else if($requestUri == "/api/courses") {
+    $controller = new CourseController();
+    $response = $controller->handleRequest($method);
+
+    header("Content-Type: application/json");
+    echo json_encode($response);
 }
 else if(file_exists($_SERVER["DOCUMENT_ROOT"] . $requestUri)) {
     require_once($_SERVER["DOCUMENT_ROOT"] . $requestUri);
