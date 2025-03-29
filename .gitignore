@@ -2,5 +2,4 @@ config.php
 controllers/taskController.php
 models/taskManager.php
 note.txt
-KClassroom.code-workspace
 note.txt

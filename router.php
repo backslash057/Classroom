@@ -4,15 +4,37 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/courseController.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/authController.php';
 
 
-$requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$requestUri = rtrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), "/");
+if($requestUri == "") $requestUri = "/";
+
 $method = $_SERVER['REQUEST_METHOD'];
-$datetime = date("D M d H:i:s Y");
 
 error_log($method . " " . $requestUri);
 
-if($requestUri == "/") {
-    require_once($_SERVER["DOCUMENT_ROOT"] . "/views/index.php");
+// no matter what is the request method
+if($requestUri == "/") { 
+    require_once($_SERVER["DOCUMENT_ROOT"] . "/routes/index.php");
 }
+else if($requestUri == "/courses") {
+    require_once($_SERVER["DOCUMENT_ROOT"] . "/routes/courses.php");
+}
+else if($requestUri == "/teachers") {
+    require_once($_SERVER["DOCUMENT_ROOT"] . "/routes/teachers.php");
+}
+else if($requestUri == "/students") {
+    require_once($_SERVER["DOCUMENT_ROOT"] . "/routes/students.php");
+}
+else if($requestUri == "/finances") {
+    require_once($_SERVER["DOCUMENT_ROOT"] . "/routes/finances.php");
+}
+else if($requestUri == "/exams") {
+    require_once($_SERVER["DOCUMENT_ROOT"] . "/routes/exams.php");
+}
+
+
+// Add some else if for the front end
+
+
 else if ($requestUri == '/login') {
     if($method == 'POST') {
         // TODO: add a try catch in case operation fails
@@ -23,7 +45,7 @@ else if ($requestUri == '/login') {
         echo json_encode($response);
     }
     else if($method == "GET") {
-        require_once($_SERVER["DOCUMENT_ROOT"] . "/views/login.php");
+        require_once($_SERVER["DOCUMENT_ROOT"] . "/views/auth/login.php");
     }
 }
 else if ($requestUri == '/signup') {
@@ -36,7 +58,7 @@ else if ($requestUri == '/signup') {
         echo json_encode($response);
     }
     else if($method == "GET") {
-        require_once $_SERVER['DOCUMENT_ROOT'] . "/views/signup.php";
+        require_once $_SERVER['DOCUMENT_ROOT'] . "/views/auth/signup.php";
     }
 }
 else if($requestUri == "/logout") {
@@ -49,7 +71,7 @@ else if($requestUri == "/logout") {
         echo json_encode($response);
     }
     else if($method == "GET"){
-        require_once $_SERVER["DOCUMENT_ROOT"] . "/views/logout.php";
+        require_once $_SERVER["DOCUMENT_ROOT"] . "/views/auth/logout.php";
     }
 }
 else if($requestUri == "/api/courses") {
@@ -59,16 +81,19 @@ else if($requestUri == "/api/courses") {
     header("Content-Type: application/json");
     echo json_encode($response);
 }
-else if(file_exists($_SERVER["DOCUMENT_ROOT"] . $requestUri)) {
-    require_once($_SERVER["DOCUMENT_ROOT"] . $requestUri);
+else if(false) {
+
 }
-else if(file_exists($_SERVER["DOCUMENT_ROOT"] . "/" . $requestUri)) {
-    require_once($_SERVER["DOCUMENT_ROOT"] . "/". $requestUri);
+
+
+// Add some else if for other api calls
+
+
+else if ($method == "GET" && file_exists($_SERVER["DOCUMENT_ROOT"] . '/public/' . $requestUri)) {
+    // Handle static files for the front end
+    
+    include_once $_SERVER["DOCUMENT_ROOT"] . '/public/' . $requestUri;
 }
-// else if (preg_match('^\/tasks(\/\d+)?$', $requestUri, $matches)) {
-//     $controller = new TaskController();
-//     $controller->handleRequest();
-// }
 else {
     // TODO: change and return the 404 page response page instead
     echo json_encode(["success"=>false, 'message' => 'Route not found.']);

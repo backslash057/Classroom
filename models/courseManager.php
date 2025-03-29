@@ -6,45 +6,64 @@ class CourseManager {
     protected $db;
 
     public function __construct() {
-        $host = "localhost";
-        $dbname = "classroom";
-        $username = "root";
-        $password = "";
-
-        $this->db = new PDO("mysql:host={$host};dbname={$dbname};charset=utf8", $username, $password);
-        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        try {
+            $host = "localhost";
+            $dbname = "classroom";
+            $username = "root";
+            $password = "";
+            
+            $this->db = new PDO("mysql:host={$host};dbname={$dbname};charset=utf8", $username, $password);
+            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            die("Database connection failed: " . $e->getMessage());
+        }
     }
 
     public function getAllCourses() {
-        $stmt = $this->db->prepare('SELECT * FROM Course ORDER BY creation_date DESC');
-        $stmt->execute([]);
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        try {
+            $stmt = $this->db->prepare('SELECT * FROM Course ORDER BY creation_date DESC');
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            return [];
+        }
     }
 
     public function getCourse($course_id) {
-        $stmt = $this->db->prepare('SELECT * FROM Course WHERE id = ?');
-        $stmt->execute([$course_id]);
-
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        try {
+            $stmt = $this->db->prepare('SELECT * FROM Course WHERE id = ?');
+            $stmt->execute([$course_id]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            return null;
+        }
     }
 
     public function addCourse($code, $title, $description) {
-        $stmt = $this->db->prepare('INSERT INTO Course (code, title, description) VALUES (?, ?, ?)');
-
-        return $stmt->execute([$code, $title, $description]);
+        try {
+            $stmt = $this->db->prepare('INSERT INTO Course (code, title, description) VALUES (?, ?, ?)');
+            return $stmt->execute([$code, $title, $description]);
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
-    // public function updateTask($id, $status, $userId) {
-    //     $stmt = $this->db->prepare('UPDATE tasks SET status = ? WHERE id = ? AND user_id = ?');
-
-    //     return $stmt->execute([$status, $id, $userId]);
-    // }
+    public function updateCourse($id, $code, $title, $description) {
+        try {
+            $stmt = $this->db->prepare('UPDATE Course SET code = ?, title = ?, description = ? WHERE id = ?');
+            return $stmt->execute([$code, $title, $description, $id]);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 
     public function deleteCourse($course_id) {
-        $stmt = $this->db->prepare('DELETE FROM Course WHERE id = ?');
-
-        return $stmt->execute([$id]);
+        try {
+            $stmt = $this->db->prepare('DELETE FROM Course WHERE id = ?');
+            return $stmt->execute([$course_id]);
+        } catch (Exception $e) {
+            return false;
+        }
     }
 }
 ?>

@@ -23,7 +23,7 @@ function authenticate(path, datas) {
             // redirect the user to home page
             setTimeout(() => {
                 window.location.replace("/");
-            }, 10000);
+            }, 1000);
         }
         else display_result(data.message, false);
     })

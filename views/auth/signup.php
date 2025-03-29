@@ -81,6 +81,6 @@ if($userData) {
     <span>Deja un compte?</span>
     <a href="/login">Se connecter</a>
 
-    <script src="/views/static/js/auth.js"></script>
+    <script src="js/auth.js"></script>
 </body>
 </html>
