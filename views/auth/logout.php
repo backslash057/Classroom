@@ -16,24 +16,26 @@ $userData = $controller->checkAuthentification();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deconnexion - Classroom</title>
     <meta charset="UTF-8">
+    <style><?php include_once $_SERVER["DOCUMENT_ROOT"] . "/public/css/logout.css" ?></style>
+    <style><?php include_once $_SERVER["DOCUMENT_ROOT"] . "/public/css/fonts.css" ?></style>
 </head>
 <body>
 <?php
     if($userData == null) {
 ?>
-        <span>You are already disconnected</span>
-        <br>
-        <a href='/'>Acceuil</a>
+        <div class="output">You are already disconnected</div>
+        <a href='/' class="link">Return Home</a>
 <?php
     }
     else {
 ?>
     <div class="output">
-        You are connected as <?php echo $userData['email']; ?>
+        You are connected as <b><?php echo $userData['email']; ?><br>
     </div>
-    <button class="button">Disconnect me</button>
+    <button class="link button">Disconnect me</button>
+    <a href='/' class="link home">Return Home</a>
     
-    <script src="views/static/js/logout.js"></script>
+    <script src="js/logout.js"></script>
 <?php
     }
 ?>

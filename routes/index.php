@@ -9,7 +9,7 @@ $controller = new Authcontroller();
 $userData = $controller->checkAuthentification();
 
 if(!$userData || !isset($userData["role"])) {
-    require_once $_SERVER["DOCUMENT_ROOT"] . "/views/default.php";
+    require_once $_SERVER["DOCUMENT_ROOT"] . "/views/landing_page.php";
 }
 else if($userData["role"] == "STUDENT") {
     require_once $_SERVER["DOCUMENT_ROOT"] . "/views/student/student_dashboard.php";

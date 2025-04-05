@@ -40,8 +40,8 @@ class AuthController {
         $request = json_decode(file_get_contents('php://input'), true);
         
         // TODO: handle missing/optional datas
-        $names = filter_var(trim($request["names"]), FILTER_SANITIZE_STRING);
-        $surnames = isset($request["surnames"]) ? filter_var(trim($request["surnames"]), FILTER_SANITIZE_STRING) : null;
+        $names = filter_var(trim($request["fnames"]), FILTER_SANITIZE_STRING);
+        $surnames = isset($request["lnames"]) ? filter_var(trim($request["lnames"]), FILTER_SANITIZE_STRING) : null;
         $email = filter_var(trim($request["email"]), FILTER_VALIDATE_EMAIL);
         $phone = filter_var(trim($request["phone"], FILTER_SANITIZE_STRING));
         $birth_date = isset($request["birth_date"]) ? filter_var($request["birth_date"], FILTER_SANITIZE_STRING) : null;

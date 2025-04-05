@@ -3,8 +3,9 @@ let error_frame = document.querySelector(".error_frame");
 
 function display_result(message, positive) {
     error_frame.innerText = message;
-    // TODO: Modifiy the color of error_frames
-    //console.log("positive: " + positive + ", message: " + message);
+    error_frame.style.display = "block";
+
+    if(positive) error_frame.classList.toggle("positive");
 }
 
 
@@ -36,6 +37,8 @@ function authenticate(path, datas) {
 
 form.addEventListener("submit", event => {
     event.preventDefault();
+
+    error_frame.style.display = "none";
 
     let formData = new FormData(event.target);
     let datas = {};

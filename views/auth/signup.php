@@ -2,12 +2,11 @@
 
 require_once $_SERVER["DOCUMENT_ROOT"] . "/controllers/authController.php";
 
-
-// Try, load and verify the user datas from his cookies
+// Try, load and verify the user data from cookies
 $controller = new Authcontroller();
 $userData = $controller->checkAuthentification();
 
-if($userData) {
+if ($userData) {
     header("Location: /logout");
     exit;
 }
@@ -20,66 +19,64 @@ if($userData) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscription - Classroom</title>
+    <style><?php include_once $_SERVER["DOCUMENT_ROOT"] . "/public/css/auth.css"; ?></style>
+    <style><?php include_once $_SERVER["DOCUMENT_ROOT"] . "/public/css/fonts.css"; ?></style>
 </head>
 <body>
-    <h1>Inscription</h1>
 
-    <div class="error_frame"></div>   <!-- dinamically display the error here -->
+    <div class="container">
+        <div class="logo">
+            <img src="imgs/logo.png" alt="Website logo">
+        </div>
 
-    <form action="/signup" method="POST" class="form">
-        <table style="border: 1px solid black">
-            <tr>
-                <td>Noms</td>
-                <td><input type="text" name="names" class="names" required></td>
-            </tr>
-            <tr>
-                <td>Prenoms</td>
-                <td><input type="text" name="surnames" class="surnames"></td>
-            </tr>
-            <tr>
-                <td>Email</td>
-                <td><input type="email" name="email" class="email" required></td>
-            </tr>
-            <tr>
-                <td>Phone number</td>
-                <td><input type="text" name="phone" class="phone" required></td>
-            </tr>
-            <tr>
-                <td>Date de naissance</td>
-                <td><input type="date" name="birth_date" class="birth_date"></td>
-            </tr>
-            <tr>
-                <td>Genre</td>
-                <td>
-                    <select name="gender">
-                        <option value="M">Homme</option>
-                        <option value="F">Femme</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>Role</td>
-                <td>
-                    <select name="role">
-                        <option value="student">Eleve</option>
-                        <option value="teacher">Enseignant</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <!-- TODO: add a button to reveal the password -->
-                <td>Mot de passe</td>
-                <td><input type="password" name="password" class="password" required></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td><input type="submit" value="S'inscrire" class="submit"></td>
-            </tr>
-        </table>
-    </form>
-    <br>
-    <span>Deja un compte?</span>
-    <a href="/login">Se connecter</a>
+        <div class="error_frame">Une erreur est survenue</div>
+
+        <form action="/signup" class="form signup-form">
+            <div class="form-entry">
+                <label class="form-label required" for="fnames">First names</label>
+                <input class="form-input" type="text" name="fnames" id="fnames" required>
+            </div>
+            <div class="form-entry">
+                <label class="form-label" for="lnames">Last names</label>
+                <input class="form-input" type="text" name="lnames" id="lnames">
+            </div>
+            <div class="form-entry">
+                <label class="form-label required" for="email">Email address</label>
+                <input class="form-input" type="email" name="email" id="email" required>
+            </div>
+            <div class="form-entry">
+                <label class="form-label required" for="phone">Phone number</label>
+                <input class="form-input" type="text" name="phone" id="phone" required>
+            </div>
+            <div class="form-entry">
+                <label class="form-label required" for="birth_date">Birth date</label>
+                <input class="form-input" type="date" name="birth_date" id="birth_date" required>
+            </div>
+            <div class="form-entry">
+                <label class="form-label" for="gender">Gender</label>
+                <select name="gender" id="gender">
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                </select>
+            </div>
+            <div class="form-entry">
+                <label class="form-label required" for="role">Role</label>
+                <select name="role" id="role">
+                    <option value="student">Student</option>
+                    <option value="teacher">Teacher</option>
+                </select>
+            </div>
+            <div class="form-entry full-width">
+                <label class="form-label required" for="password">Password</label>
+                <input class="form-input" type="password" name="password" id="password" required>
+            </div>
+            <input type="submit" value="S'inscrire" class="full-width">
+            <div class="form-footer full-width">
+                <span>Already have an account?</span>
+                <a href="/login">Log in</a>
+            </div>
+        </form>
+    </div>
 
     <script src="js/auth.js"></script>
 </body>

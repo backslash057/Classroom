@@ -1,14 +1,17 @@
 button = document.querySelector(".button");
 output = document.querySelector(".output");
-button.addEventListener("click", event => logout());
+home = document.querySelector(".home");
+
+button.addEventListener("click", logout);
 
 
 function logout() {
-    fetch("/logout", {method: "POST"}
-    ).then(response => response.json()
-    ).then((data) => {
+    fetch("/logout", {method: "POST"})
+    .then(response => response.json())
+    .then((data) => {
         if(data.success) {
-            button.remove();
+            button.style.display = "none";
+            home.style.display = "block";
             output.innerText = data.success
         }
         else if(data.error) {
