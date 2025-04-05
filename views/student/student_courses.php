@@ -16,13 +16,13 @@
             <img src="imgs/logo.png">
         </div>
         <ul class="menu-items">
-            <li class="active-menu">
+            <li>
                 <a href="/">
                     <div class="menu-icon"><?php include $_SERVER["DOCUMENT_ROOT"] . "/public/imgs/home.svg" ?></div>
                     <span>Home</span>
                 </a>
             </li>
-            <li>
+            <li class="active-menu">
                 <a href="/courses">
                     <div class="menu-icon"><?php include $_SERVER["DOCUMENT_ROOT"] . "/public/imgs/courses.svg" ?></div>
                     <span>Courses</span>
@@ -48,13 +48,14 @@
                 <img src="imgs/logout.png" alt="Icon for logout button" srcset="">
                 <a href="/logout">Logout</a>
             </div></div>
-        <h3>Your courses</h3>
-        <div id="courses-list"></div>
+
+            <div id="courses-list"></div>
+
+            <script src="js/student_course.js"></script>
+            <script>
+                window.addEventListener('DOMContentLoaded', loadCourses);
+            </script>
     </div>
 
-    <script src="js/student_course.js"></script>
-    <script>
-        window.addEventListener('DOMContentLoaded', loadJoinedCourses);
-    </script>
 </body>
 </html>

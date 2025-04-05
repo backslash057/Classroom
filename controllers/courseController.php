@@ -15,7 +15,7 @@ class CourseController {
     public function handleRequest($method) {
         try {
             $user = $this->auth->checkAuthentification();
-            if (!$user || $user["role"] == "STUDENT") {
+            if (!$user || ($user["role"] == "STUDENT" && $method != "GET" && $method != "POST")) {
                 http_response_code(403);
                 return ['success' => false, 'message' => 'Unauthorized'];
             }
@@ -25,37 +25,56 @@ class CourseController {
 
             switch ($method) {
                 case 'GET':
-                    if (!empty($data['id'])) {
-                        $course_id = (int) $data['id'];
-                        if ($course_id <= 0) {
-                            http_response_code(400);
-                            return ['success' => false, 'message' => 'Invalid course ID'];
-                        }
-
-                        $course = $this->courseManager->getCourse($course_id);
-                        if ($course) {
-                            return ['success' => true, 'course' => $course];
-                        } else {
-                            http_response_code(404);
-                            return ['success' => false, 'message' => 'Course not found'];
-                        }
-                    } else {
-                        $courses = $this->courseManager->getAllCourses();
+                    if(isset($_GET['joined']) && $_GET['joined']==1) {
+                        $user_id = $user["user_id"];
+                        $courses = $this->courseManager->getJoinedCourses($user_id);
+                        error_log(print_r($courses, true));
                         return ['success' => true, 'courses' => $courses];
+                    }
+                    else {
+                        if (!empty($data['id'])) {
+                            $course_id = (int) $data['id'];
+                            if ($course_id <= 0) {
+                                http_response_code(400);
+                                return ['success' => false, 'message' => 'Invalid course ID'];
+                            }
+
+                            $course = $this->courseManager->getCourse($course_id);
+                            if ($course) {
+                                return ['success' => true, 'course' => $course];
+                            } else {
+                                http_response_code(404);
+                                return ['success' => false, 'message' => 'Course not found'];
+                            }
+                        } else {
+                            $courses = $this->courseManager->getAllCourses();
+                            return ['success' => true, 'courses' => $courses];
+                        }
                     }
 
                 case 'POST':
-                    if (isset($data['code'], $data['title'], $data['description'])) {
-                        if ($this->courseManager->addCourse($data['code'], $data['title'], $data['description'])) {
+                    if($user['role']=="STUDENT") {
+                        if ($this->courseManager->joinCourse($user['user_id'], $data['course_id'])) {
                             http_response_code(201);
-                            return ['success' => true, 'message' => 'Course created'];
-                        } else {
-                            http_response_code(409);
-                            return ['success' => false, 'message' => "Course with code {$data['code']} already exists"];
+                            return ['success' => true, 'message' => 'Course joined successfully'];
                         }
+
+                        http_response_code(400);
+                        return ['success' => false, 'message' => 'Course join failed'];
                     }
-                    http_response_code(400);
-                    return ['success' => false, 'message' => 'Missing fields for course creation'];
+                    else {
+                        if (isset($data['code'], $data['title'], $data['description'])) {
+                            if ($this->courseManager->addCourse($data['code'], $data['title'], $data['description'])) {
+                                http_response_code(201);
+                                return ['success' => true, 'message' => 'Course created'];
+                            } else {
+                                http_response_code(409);
+                                return ['success' => false, 'message' => "Course with code {$data['code']} already exists"];
+                            }
+                        }
+                        http_response_code(400);
+                        return ['success' => false, 'message' => 'Missing fields for course creation'];
+                    }
 
                 case 'PUT':
                     if (isset($data['id'], $data['code'], $data['title'], $data['description'])) {

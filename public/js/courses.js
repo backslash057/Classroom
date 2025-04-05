@@ -1,5 +1,3 @@
-const API_URL = '/api/courses';
-
 const addCourseBtn = document.getElementById('add-course-btn');
 const modal = document.getElementById('add-course-modal');
 const closeModal = document.getElementById('close-modal');
@@ -27,7 +25,7 @@ submitCourse.addEventListener('click', async () => {
         return;
     }
 
-    const response = await fetch(API_URL, {
+    const response = await fetch("/api/courses", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code, title, description })
@@ -46,7 +44,7 @@ submitCourse.addEventListener('click', async () => {
 
 
 async function loadCourses() {
-    const response = await fetch(API_URL);
+    const response = await fetch("/api/courses");
     const result = await response.json();
     
     if (result.success && result.courses) {
@@ -75,7 +73,7 @@ function editCourse(id, code, title, description) {
 
 
 async function updateCourse(id, code, title, description) {
-    const response = await fetch(API_URL, {
+    const response = await fetch("/api/courses", {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, code, title, description })
@@ -90,11 +88,10 @@ async function updateCourse(id, code, title, description) {
     }
 }
 
-
 async function deleteCourse(id) {
     if (!confirm('Are you sure you want to delete this course?')) return;
     console.log(id)
-    const response = await fetch(API_URL, {
+    const response = await fetch("/api/courses", {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({id: id })

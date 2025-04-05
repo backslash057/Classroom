@@ -30,7 +30,7 @@ class AuthManager {
     }
 
     public function getUserByEmail($email) {
-        $stmt = $this->db->prepare("SELECT names, surnames, email, phone, birth_date, gender, role FROM Users WHERE email = ?");
+        $stmt = $this->db->prepare("SELECT user_id,  names, surnames, email, phone, birth_date, gender, role FROM Users WHERE email = ?");
         $stmt->execute([$email]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }

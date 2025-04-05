@@ -65,5 +65,29 @@ class CourseManager {
             return false;
         }
     }
+
+    public function joinCourse($user_id, $course_id) {
+        try {
+            $stmt = $this->db->prepare('INSERT INTO Course_join(user_id, course_id) VALUES (?, ?)');
+            return $stmt->execute([$user_id, $course_id]);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    public function getJoinedCourses($user_id) {
+        try {
+            $stmt = $this->db->prepare('
+                SELECT * FROM Course
+                JOIN Course_join ON Course.id = Course_join.course_id
+                WHERE Course_join.user_id = ?
+                ORDER BY creation_date DESC
+            ');
+            $stmt->execute([$user_id]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            return [];
+        }
+    }
 }
 ?>
