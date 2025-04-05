@@ -31,7 +31,7 @@ if($userData) {
 
         <div class="error_frame">Une erreur est survenue</div> 
 
-        <form action="/login" method="POST" class="form">
+        <form action="/login" class="form">
             <div class="form-entry">
                 <label class="form-label required" for="email">Email address</label>
                 <input class="form-input" type="email" name="email" id="email" required>
@@ -49,6 +49,6 @@ if($userData) {
 
     </div>
     <!-- <script src="/static/js/debug.js"></script> -->
-    <script src="views/static/js/auth.js"></script>
+    <script src="js/auth.js"></script>
 </body>
 </html>

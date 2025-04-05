@@ -12,6 +12,7 @@
     <style><?php include $_SERVER["DOCUMENT_ROOT"] . "/public/css/fonts.css" ?></style>
     <style><?php include $_SERVER["DOCUMENT_ROOT"] . "/public/css/menu.css" ?></style>
     <style><?php include $_SERVER["DOCUMENT_ROOT"] . "/public/css/admin.css" ?></style>
+    <style><?php include $_SERVER["DOCUMENT_ROOT"] . "/public/css/courses.css" ?></style>
 </head>
 <body>
     <div class="menu">
@@ -76,8 +77,25 @@
                 <a href="/logout">Logout</a>
             </div>
         </div>
+        <div class="courses-section">
+            <button id="add-course-btn" class="add-course-btn">Add Course</button>
+            <div id="courses-list"></div>
+        </div>
+        <div id="add-course-modal" class="modal">
+        <div class="modal-content">
+                <h2>Add a New Course</h2>
+                <input type="text" id="course-code" placeholder="Course Code">
+                <input type="text" id="course-title" placeholder="Course Title">
+                <textarea id="course-description" placeholder="Course Description"></textarea>
+                <div class="modal-actions">
+                    <button id="submit-course" class="btn">Create</button>
+                    <button id="close-modal" class="btn cancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <div id="courses-list"></div>
 
-        Available courses
+        <script src="js/courses.js"></script>
     </div>
 </body>
 </html>

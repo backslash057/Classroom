@@ -47,7 +47,7 @@ class AuthController {
         $birth_date = isset($request["birth_date"]) ? filter_var($request["birth_date"], FILTER_SANITIZE_STRING) : null;
         $gender = isset($request["gender"]) ? filter_var($request["gender"], FILTER_SANITIZE_STRING) : null;
         $role = filter_var($request["role"], FILTER_SANITIZE_STRING);
-        $password = password_hash($request["password"], PASSWORD_BCRYPT);
+        $password = isset($request["password"])? $request["password"]: "";
 
         if(!$email) return ['success'=>false, 'message' => 'Invalid email address'];
         if(!$role) return ['success'=>false, 'message' => 'A role must be specified'];
